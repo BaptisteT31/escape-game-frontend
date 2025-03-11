@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Étape 1 - Questionnaire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        input {
+            padding: 10px;
+            width: 250px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Étape 1 - Répondez aux 5 questions</h1>
+    <div id="quiz">
+        <div class="question">1. Quelle est la capitale de la France ? <br> <input type="text" id="q1"></div>
+        <div class="question">2. Combien font 7 x 8 ? <br> <input type="text" id="q2"></div>
+        <div class="question">3. Qui a peint la Joconde ? <br> <input type="text" id="q3"></div>
+        <div class="question">4. Quelle est la formule chimique de l'eau ? <br> <input type="text" id="q4"></div>
+        <div class="question">5. En quelle année a eu lieu la Révolution Française ? <br> <input type="text" id="q5"></div>
+    </div>
+    <button onclick="validateAnswers()">Valider les réponses</button>
+    <div id="message"></div>
+
+    <script>
+        const API_URL = "https://escape-game-backend-71zo.onrender.com";
+
+        async function validateAnswers() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const teamId = urlParams.get("team_id");
+            if (!teamId) {
+                document.getElementById("message").innerText = "Erreur : Aucun ID d'équipe fourni.";
+                return;
+            }
+
+            const answers = {
+                q1: document.getElementById("q1").value.trim().toLowerCase(),
+                q2: document.getElementById("q2").value.trim(),
+                q3: document.getElementById("q3").value.trim().toLowerCase(),
+                q4: document.getElementById("q4").value.trim().toLowerCase(),
+                q5: document.getElementById("q5").value.trim()
+            };
+
+            const correctAnswers = {
+                q1: "paris",
+                q2: "56",
+                q3: "léonard de vinci",
+                q4: "h2o",
+                q5: "1789"
+            };
+
+            let mistakes = 0;
+            for (let key in correctAnswers) {
+                if (answers[key] !== correctAnswers[key]) {
+                    mistakes++;
+                }
+            }
+
+            if (mistakes > 0) {
+                await fetch(`${API_URL}/penalize_team`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ team_id: teamId, penalty: mistakes * 120 })
+                });
+                document.getElementById("message").innerText = `Vous avez ${mistakes} erreurs, -${mistakes * 2} min.`;
+            } else {
+                await fetch(`${API_URL}/validate_step`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ team_id: teamId })
+                });
+                document.getElementById("message").innerText = "Toutes les réponses sont correctes ! Passage à l'étape suivante...";
+                setTimeout(() => {
+                    window.location.href = `etape2.html?team_id=${teamId}`;
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
