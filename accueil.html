@@ -1,75 +1,160 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Accueil du jeu</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil du jeu</title>
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Conteneur centré */
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        /* Titre */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Input & Boutons */
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-register {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-register:hover {
+            background-color: #218838;
+        }
+
+        .btn-start {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-start:hover {
+            background-color: #0056b3;
+        }
+
+        /* Message d'erreur / succès */
+        #message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+            input, button {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Bienvenue dans le jeu !</h1>
 
-  <!-- Formulaire d'inscription -->
-  <div>
-    <input type="text" id="team-name" placeholder="Nom de l'équipe" />
-    <button onclick="registerTeam()">S'enregistrer</button>
-  </div>
+    <div class="container">
+        <h1>Bienvenue dans le jeu !</h1>
 
-  <!-- Message de feedback -->
-  <div id="message"></div>
+        <!-- Formulaire d'inscription -->
+        <input type="text" id="team-name" placeholder="Nom de l'équipe" />
+        <button class="btn-register" onclick="registerTeam()">S'enregistrer</button>
 
-  <!-- Bouton pour commencer le jeu -->
-  <div>
-    <button onclick="startGame()">Commencer le jeu</button>
-  </div>
+        <!-- Message de feedback -->
+        <div id="message"></div>
 
-  <script>
-    const API_URL = "https://escape-game-backend-71zo.onrender.com";
-    let currentTeamId = null;
+        <!-- Bouton pour commencer le jeu -->
+        <button class="btn-start" onclick="startGame()">Commencer le jeu</button>
+    </div>
 
-    // Appel /create_team pour enregistrer l'équipe
-    async function registerTeam() {
-      const nameInput = document.getElementById("team-name");
-      const messageDiv = document.getElementById("message");
+    <script>
+        const API_URL = "https://escape-game-backend-71zo.onrender.com";
+        let currentTeamId = null;
 
-      const teamName = nameInput.value.trim();
-      if (!teamName) {
-        messageDiv.innerText = "Veuillez entrer un nom d'équipe.";
-        messageDiv.style.color = "red";
-        return;
-      }
+        // Appel /create_team pour enregistrer l'équipe
+        async function registerTeam() {
+            const nameInput = document.getElementById("team-name");
+            const messageDiv = document.getElementById("message");
 
-      try {
-        const response = await fetch(`${API_URL}/create_team`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: teamName })
-        });
-        const data = await response.json();
+            const teamName = nameInput.value.trim();
+            if (!teamName) {
+                messageDiv.innerText = "⚠️ Veuillez entrer un nom d'équipe.";
+                messageDiv.style.color = "red";
+                return;
+            }
 
-        if (response.ok) {
-          messageDiv.style.color = "green";
-          messageDiv.innerText = data.message;
-          // On stocke l'id de l'équipe pour la suite
-          currentTeamId = data.team_id;
-        } else {
-          messageDiv.style.color = "red";
-          messageDiv.innerText = data.error || "Erreur lors de l'enregistrement.";
+            try {
+                const response = await fetch(`${API_URL}/create_team`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name: teamName })
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.style.color = "green";
+                    messageDiv.innerText = "✅ Équipe enregistrée avec succès !";
+                    currentTeamId = data.team_id;
+                } else {
+                    messageDiv.style.color = "red";
+                    messageDiv.innerText = data.error || "❌ Erreur lors de l'enregistrement.";
+                }
+            } catch (error) {
+                console.error(error);
+                messageDiv.style.color = "red";
+                messageDiv.innerText = "❌ Erreur de connexion au serveur.";
+            }
         }
-      } catch (error) {
-        console.error(error);
-        messageDiv.style.color = "red";
-        messageDiv.innerText = "Erreur de connexion à l'API.";
-      }
-    }
 
-    // Bouton "Commencer le jeu"
-    function startGame() {
-      if (!currentTeamId) {
-        alert("Veuillez d'abord enregistrer votre équipe !");
-        return;
-      }
-      // Redirige vers etape1.html avec l'id de l'équipe
-      window.location.href = `etape1.html?team_id=${currentTeamId}`;
-    }
-  </script>
+        // Bouton "Commencer le jeu"
+        function startGame() {
+            if (!currentTeamId) {
+                alert("⚠️ Veuillez d'abord enregistrer votre équipe !");
+                return;
+            }
+            // Redirige vers etape1.html avec l'id de l'équipe
+            window.location.href = `etape1.html?team_id=${currentTeamId}`;
+        }
+    </script>
+
 </body>
 </html>
