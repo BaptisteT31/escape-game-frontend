@@ -69,6 +69,13 @@
     <script>
         const API_URL = "https://escape-game-backend-71zo.onrender.com";
 
+        // Fonction pour formater le temps en minutes:secondes (mm:ss)
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes} min ${remainingSeconds.toString().padStart(2, '0')} sec`;
+        }
+
         // Fonction pour récupérer et afficher la liste des équipes
         async function fetchTeams() {
             try {
@@ -90,12 +97,12 @@
                     const teamItem = document.createElement("div");
                     teamItem.className = "team-item";
                     
-                    const timeSeconds = Math.floor(team.elapsed_time);  // arrondi en secondes
+                    const timeFormatted = formatTime(Math.floor(team.elapsed_time));  // Convertir en mm:ss
                     const isCompleted = team.completed ? "✅ Oui" : "❌ Non";
 
                     teamItem.innerText = 
                         `🏆 ${team.name} — Étape ${team.current_step} | ` +
-                        `⏳ Temps : ${timeSeconds}s | Terminé : ${isCompleted}`;
+                        `⏳ Temps : ${timeFormatted} | Terminé : ${isCompleted}`;
                     
                     teamsDiv.appendChild(teamItem);
                 });
