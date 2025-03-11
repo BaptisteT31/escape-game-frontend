@@ -16,6 +16,19 @@
             color: #333;
         }
 
+        /* QR Code */
+        #qr-container {
+            margin-bottom: 20px;
+        }
+
+        #qr-code {
+            width: 200px;
+            height: 200px;
+            border: 5px solid #333;
+            border-radius: 10px;
+        }
+
+        /* Classement */
         #team-list {
             margin-top: 30px;
             text-align: left;
@@ -27,8 +40,13 @@
         }
 
         .team-item {
-            padding: 5px 0;
+            padding: 10px 0;
             font-size: 18px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .team-item:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
@@ -36,6 +54,13 @@
 
     <h1>Page Spectateur</h1>
 
+    <!-- QR Code -->
+    <div id="qr-container">
+        <h2>Scannez pour rejoindre le jeu</h2>
+        <img id="qr-code" src="qr_code.png" alt="QR Code">
+    </div>
+
+    <!-- Classement des équipes -->
     <div id="team-list">
         <h2>Classement des équipes :</h2>
         <div id="teams"></div>
@@ -53,16 +78,24 @@
                 const teamsDiv = document.getElementById("teams");
                 teamsDiv.innerHTML = "";
 
+                // Trier les équipes en fonction de l'étape (current_step DESC), puis temps écoulé (elapsed_time ASC)
+                data.teams.sort((a, b) => {
+                    if (b.current_step !== a.current_step) {
+                        return b.current_step - a.current_step; // Étape la plus haute en premier
+                    }
+                    return a.elapsed_time - b.elapsed_time; // Si égalité, équipe la plus rapide en premier
+                });
+
                 data.teams.forEach(team => {
                     const teamItem = document.createElement("div");
                     teamItem.className = "team-item";
                     
                     const timeSeconds = Math.floor(team.elapsed_time);  // arrondi en secondes
-                    const isCompleted = team.completed ? "Oui" : "Non";
+                    const isCompleted = team.completed ? "✅ Oui" : "❌ Non";
 
                     teamItem.innerText = 
-                        `${team.name} — Étape : ${team.current_step}, ` +
-                        `Temps : ${timeSeconds}s, Terminé : ${isCompleted}`;
+                        `🏆 ${team.name} — Étape ${team.current_step} | ` +
+                        `⏳ Temps : ${timeSeconds}s | Terminé : ${isCompleted}`;
                     
                     teamsDiv.appendChild(teamItem);
                 });
