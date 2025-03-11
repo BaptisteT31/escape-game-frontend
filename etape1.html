@@ -1,180 +1,227 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Étape 1 - Questions</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        h1 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .question {
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .btn-validate {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .btn-validate:hover {
-            background-color: #218838;
-        }
-
-        #message {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Étape 1 - 11 Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .question {
+      margin-bottom: 15px;
+    }
+    .question p {
+      margin: 0 0 5px;
+      font-weight: bold;
+    }
+    .question input {
+      width: 100%;
+      padding: 8px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #submit-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    #submit-btn:hover {
+      background: #218838;
+    }
+    #timer {
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #666;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Étape 1 - Questions</h1>
+  <div class="container">
+    <h1>Étape 1 - 11 Questions</h1>
+    <div id="timer">Temps : 0s</div>
 
-        <p class="question">1. Quelle est la capitale de la France ?</p>
-        <input type="text" id="q1" placeholder="Votre réponse">
-
-        <p class="question">2. Combien font 5 + 3 ?</p>
-        <input type="text" id="q2" placeholder="Votre réponse">
-
-        <p class="question">3. De quelle couleur est le ciel ?</p>
-        <input type="text" id="q3" placeholder="Votre réponse">
-
-        <p class="question">4. Quel est le plus grand océan du monde ?</p>
-        <input type="text" id="q4" placeholder="Votre réponse">
-
-        <p class="question">5. Combien de côtés a un triangle ?</p>
-        <input type="text" id="q5" placeholder="Votre réponse">
-
-        <button class="btn-validate" onclick="validateAnswers()">Valider les réponses</button>
-
-        <div id="message"></div>
+    <!-- Formulaire de questions -->
+    <div class="question">
+      <p>1. Quelle est la latitude de Toulouse ?</p>
+      <input type="text" id="q1" />
+    </div>
+    <div class="question">
+      <p>2. Quelle est la somme du numéro de département de l'Ariège avec celui de la Maine-et-Loire ?</p>
+      <input type="text" id="q2" />
+    </div>
+    <div class="question">
+      <p>3. Combien de panneaux de 600Wc pour un parc de 300kWc ?</p>
+      <input type="text" id="q3" />
+    </div>
+    <div class="question">
+      <p>4. Comment s'appelle l'outil de prospection de sites développé par Maxime ?</p>
+      <input type="text" id="q4" />
+    </div>
+    <div class="question">
+      <p>5. Quelle température est utilisée lors du calcul STC d'un panneau ?</p>
+      <input type="text" id="q5" />
+    </div>
+    <div class="question">
+      <p>6. Quelle est l'inclinaison plein sud optimale pour un panneau ?</p>
+      <input type="text" id="q6" />
+    </div>
+    <div class="question">
+      <p>7. Quel élément d'une installation photovoltaïque définit le ratio AC/DC ?</p>
+      <input type="text" id="q7" />
+    </div>
+    <div class="question">
+      <p>8. Quelle est la latitude d'Angers ?</p>
+      <input type="text" id="q8" />
+    </div>
+    <div class="question">
+      <p>9. Comment s'appelle l'appareil qu'on utilise pour mesurer l'intensité du rayonnement solaire ?</p>
+      <input type="text" id="q9" />
+    </div>
+    <div class="question">
+      <p>10. Comment s'appelle le tarif d'achat pour toiture ?</p>
+      <input type="text" id="q10" />
+    </div>
+    <div class="question">
+      <p>11. Soit une éolienne dont les pales font 200 m de diamètre, le vent est de 10m/s.
+         Soit pi=2,34, et la masse volumique de l'air 1kg/m^3.
+         Combien d'éléphants de 2 tonnes et 340kg passent théoriquement dans l'éolienne
+         chaque seconde dans ces conditions ?</p>
+      <input type="text" id="q11" />
     </div>
 
-    <script>
-        const API_URL = "https://escape-game-backend-71zo.onrender.com";
-        const urlParams = new URLSearchParams(window.location.search);
-        const teamId = urlParams.get('team_id');
+    <button id="submit-btn">Valider</button>
+    <div id="result"></div>
+  </div>
 
-        // Réponses correctes
-        const correctAnswers = {
-            q1: "Paris",
-            q2: "8",
-            q3: "bleu",
-            q4: "Pacifique",
-            q5: "3"
-        };
+  <script>
+    const API_URL = "https://escape-game-backend-71zo.onrender.com"; // Remplace par l'URL de ton backend
+    const urlParams = new URLSearchParams(window.location.search);
+    const teamId = urlParams.get('team_id');
 
-        async function validateAnswers() {
-            let correctCount = 0;
-            let wrongCount = 0;
+    let elapsedSeconds = 0;
+    let timerInterval = null;
 
-            // Vérification des réponses
-            Object.keys(correctAnswers).forEach(q => {
-                const userAnswer = document.getElementById(q).value.trim().toLowerCase();
-                if (userAnswer === correctAnswers[q].toLowerCase()) {
-                    correctCount++;
-                } else {
-                    wrongCount++;
-                }
-            });
+    // Exemple de réponses attendues (A DÉFINIR)
+    const correctAnswers = {
+      q1: "43.5",
+      q2: "58",
+      q3: "500",
+      q4: "data analyzeur",
+      q5: "25",
+      q6: "35",
+      q7: "onduleurs",
+      q8: "47.5",
+      q9: "pyranomètre",
+      q10: "s21",
+      q11: "10"
+    };
 
-            const messageDiv = document.getElementById("message");
-            let gainedPoints = correctCount * 10; // +10 points par bonne réponse
-            let lostPoints = wrongCount * 5; // -5 points par mauvaise réponse
-            let finalScore = gainedPoints - lostPoints;
+    // Fonction pour normaliser la réponse :
+    // - En minuscules
+    // - Retire les articles/pronoms "le","la","l'","un","une","du", etc.
+    // - Retire accents si besoin
+    function normalizeAnswer(str) {
+      // Tout en minuscules
+      let ans = str.toLowerCase().trim();
+      // On supprime certains articles (globalement).
+      // On peut en ajouter selon le besoin.
+      // \b = limite de mot (donc "la" etc. si isolé).
+      // 'l' doit être manipulé avec prudence
+      ans = ans.replace(/\bl[’']\b/g, "");     // remplace l' ou l’ seul
+      ans = ans.replace(/\b(le|la|les|un|une|du|des|de)\b/g, ""); 
+      // On retire les espaces excessifs
+      ans = ans.replace(/\s+/g, " ").trim(); 
+      return ans;
+    }
 
-            messageDiv.style.color = "blue";
-            messageDiv.innerText = `✅ Réponses correctes : ${correctCount}, ❌ Erreurs : ${wrongCount} 
-                                    📊 Score : +${gainedPoints} -${lostPoints} = ${finalScore} points. 
-                                    Passage à l'étape 2...`;
+    window.onload = function() {
+      timerInterval = setInterval(() => {
+        elapsedSeconds++;
+        document.getElementById("timer").textContent = `Temps : ${elapsedSeconds}s`;
+      }, 1000);
+    };
 
-            // Mettre à jour le score via l'API
-            try {
-                const updateScoreResponse = await fetch(`${API_URL}/update_score`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        team_id: teamId,
-                        score: finalScore
-                    })
-                });
+    document.getElementById("submit-btn").addEventListener("click", async () => {
+      // Arrête le chrono
+      clearInterval(timerInterval);
 
-                if (!updateScoreResponse.ok) {
-                    console.error("Erreur lors de la mise à jour du score");
-                }
+      let totalScore = 0;
 
-            } catch (error) {
-                console.error("Erreur de connexion au serveur :", error);
-            }
-
-            // Valider l'étape via l'API
-            try {
-                const validateResponse = await fetch(`${API_URL}/validate_step`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ team_id: teamId })
-                });
-
-                if (!validateResponse.ok) {
-                    console.error("Erreur lors de la validation de l'étape");
-                }
-
-            } catch (error) {
-                console.error("Erreur de connexion au serveur :", error);
-            }
-
-            // Redirige vers l'étape suivante après 3 secondes pour laisser le temps de voir les résultats
-            setTimeout(() => {
-                window.location.href = `etape2.html?team_id=${teamId}`;
-            }, 3000);
+      // Parcours des 11 questions
+      for (let i = 1; i <= 11; i++) {
+        const userRaw = document.getElementById(`q${i}`).value;
+        const userAnswer = normalizeAnswer(userRaw);
+        if (!userAnswer) {
+          // Si pas de réponse => -1 point
+          totalScore -= 1;
+        } else {
+          // Normalise la bonne réponse également
+          const correct = normalizeAnswer(correctAnswers[`q${i}`] || "");
+          // Compare
+          if (userAnswer === correct) {
+            totalScore += 1;
+          }
+          // sinon => 0
         }
-    </script>
+      }
 
+      // Mise à jour du score dans le backend
+      try {
+        await fetch(`${API_URL}/update_score`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ team_id: teamId, score: totalScore })
+        });
+
+        await fetch(`${API_URL}/validate_step`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ team_id: teamId })
+        });
+      } catch (error) {
+        console.error("Erreur lors de la mise à jour du score ou de la validation :", error);
+      }
+
+      // Affiche le résultat + temps écoulé
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `
+        <p>Vous avez terminé avec un score de ${totalScore} points.</p>
+        <p>Temps total : ${elapsedSeconds} secondes.</p>
+      `;
+    });
+  </script>
 </body>
 </html>
