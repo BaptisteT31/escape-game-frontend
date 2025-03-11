@@ -48,6 +48,11 @@
         .team-item:last-child {
             border-bottom: none;
         }
+
+        .score {
+            font-weight: bold;
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -85,12 +90,15 @@
                 const teamsDiv = document.getElementById("teams");
                 teamsDiv.innerHTML = "";
 
-                // Trier les équipes en fonction de l'étape (current_step DESC), puis temps écoulé (elapsed_time ASC)
+                // Trier les équipes : Score (desc) > Étape (desc) > Temps (asc)
                 data.teams.sort((a, b) => {
+                    if (b.score !== a.score) {
+                        return b.score - a.score; // Score le plus haut en premier
+                    }
                     if (b.current_step !== a.current_step) {
                         return b.current_step - a.current_step; // Étape la plus haute en premier
                     }
-                    return a.elapsed_time - b.elapsed_time; // Si égalité, équipe la plus rapide en premier
+                    return a.elapsed_time - b.elapsed_time; // Temps le plus rapide en premier
                 });
 
                 data.teams.forEach(team => {
@@ -100,9 +108,11 @@
                     const timeFormatted = formatTime(Math.floor(team.elapsed_time));  // Convertir en mm:ss
                     const isCompleted = team.completed ? "✅ Oui" : "❌ Non";
 
-                    teamItem.innerText = 
-                        `🏆 ${team.name} — Étape ${team.current_step} | ` +
-                        `⏳ Temps : ${timeFormatted} | Terminé : ${isCompleted}`;
+                    teamItem.innerHTML = 
+                        `🏆 <strong>${team.name}</strong> — Étape ${team.current_step} | ` +
+                        `⏳ Temps : ${timeFormatted} | ` +
+                        `🏅 Score : <span class="score">${team.score} pts</span> | ` +
+                        `Terminé : ${isCompleted}`;
                     
                     teamsDiv.appendChild(teamItem);
                 });
