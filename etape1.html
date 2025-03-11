@@ -74,127 +74,75 @@
     <div id="timer">Temps : 0s</div>
 
     <!-- Formulaire de questions -->
-    <div class="question">
-      <p>1. Quelle est la latitude de Toulouse ?</p>
-      <input type="text" id="q1" />
-    </div>
-    <div class="question">
-      <p>2. Quelle est la somme du numéro de département de l'Ariège avec celui de la Maine-et-Loire ?</p>
-      <input type="text" id="q2" />
-    </div>
-    <div class="question">
-      <p>3. Combien de panneaux de 600Wc pour un parc de 300kWc ?</p>
-      <input type="text" id="q3" />
-    </div>
-    <div class="question">
-      <p>4. Comment s'appelle l'outil de prospection de sites développé par Maxime ?</p>
-      <input type="text" id="q4" />
-    </div>
-    <div class="question">
-      <p>5. Quelle température est utilisée lors du calcul STC d'un panneau ?</p>
-      <input type="text" id="q5" />
-    </div>
-    <div class="question">
-      <p>6. Quelle est l'inclinaison plein sud optimale pour un panneau ?</p>
-      <input type="text" id="q6" />
-    </div>
-    <div class="question">
-      <p>7. Quel élément d'une installation photovoltaïque définit le ratio AC/DC ?</p>
-      <input type="text" id="q7" />
-    </div>
-    <div class="question">
-      <p>8. Quelle est la latitude d'Angers ?</p>
-      <input type="text" id="q8" />
-    </div>
-    <div class="question">
-      <p>9. Comment s'appelle l'appareil qu'on utilise pour mesurer l'intensité du rayonnement solaire ?</p>
-      <input type="text" id="q9" />
-    </div>
-    <div class="question">
-      <p>10. Comment s'appelle le tarif d'achat pour toiture ?</p>
-      <input type="text" id="q10" />
-    </div>
-    <div class="question">
-      <p>11. Soit une éolienne dont les pales font 200 m de diamètre, le vent est de 10m/s.
-         Soit pi=2,34, et la masse volumique de l'air 1kg/m^3.
-         Combien d'éléphants de 2 tonnes et 340kg passent théoriquement dans l'éolienne
-         chaque seconde dans ces conditions ?</p>
-      <input type="text" id="q11" />
-    </div>
+    <div class="question"><p>1. Quelle est la latitude de Toulouse ?</p><input type="text" id="q1" /></div>
+    <div class="question"><p>2. Quelle est la somme du numéro de département de l'Ariège avec celui de la Maine-et-Loire ?</p><input type="text" id="q2" /></div>
+    <div class="question"><p>3. Combien de panneaux de 600Wc pour un parc de 300kWc ?</p><input type="text" id="q3" /></div>
+    <div class="question"><p>4. Comment s'appelle l'outil de prospection de sites développé par Maxime ?</p><input type="text" id="q4" /></div>
+    <div class="question"><p>5. Quelle température est utilisée lors du calcul STC d'un panneau ?</p><input type="text" id="q5" /></div>
+    <div class="question"><p>6. Quelle est l'inclinaison plein sud optimale pour un panneau ?</p><input type="text" id="q6" /></div>
+    <div class="question"><p>7. Quel élément d'une installation photovoltaïque définit le ratio AC/DC ?</p><input type="text" id="q7" /></div>
+    <div class="question"><p>8. Quelle est la latitude d'Angers ?</p><input type="text" id="q8" /></div>
+    <div class="question"><p>9. Comment s'appelle l'appareil qu'on utilise pour mesurer l'intensité du rayonnement solaire ?</p><input type="text" id="q9" /></div>
+    <div class="question"><p>10. Comment s'appelle le tarif d'achat pour toiture ?</p><input type="text" id="q10" /></div>
+    <div class="question"><p>11. Soit une éolienne dont les pales font 200 m de diamètre, le vent est de 10m/s. Combien d'éléphants de 2 tonnes et 340kg passent théoriquement dans l'éolienne chaque seconde dans ces conditions ?</p><input type="text" id="q11" /></div>
 
     <button id="submit-btn">Valider</button>
     <div id="result"></div>
   </div>
 
   <script>
-    const API_URL = "https://escape-game-backend-71zo.onrender.com"; // Remplace par l'URL de ton backend
+    const API_URL = "https://escape-game-backend-71zo.onrender.com";
     const urlParams = new URLSearchParams(window.location.search);
     const teamId = urlParams.get('team_id');
 
     let elapsedSeconds = 0;
-    let timerInterval = null;
+    let timerInterval = setInterval(() => {
+      elapsedSeconds++;
+      document.getElementById("timer").textContent = `Temps : ${elapsedSeconds}s`;
+    }, 1000);
 
-    // Exemple de réponses attendues (A DÉFINIR)
+    // Réponses exactes (pas d'approximation pour les chiffres)
     const correctAnswers = {
       q1: "43.5",
       q2: "58",
       q3: "500",
       q4: "data analyzeur",
       q5: "25",
-      q6: "35",
-      q7: "onduleurs",
+      q6: "30",
+      q7: "onduleur",
       q8: "47.5",
       q9: "pyranomètre",
-      q10: "s21",
+      q10: "S21",
       q11: "10"
     };
 
-    // Fonction pour normaliser la réponse :
-    // - En minuscules
-    // - Retire les articles/pronoms "le","la","l'","un","une","du", etc.
-    // - Retire accents si besoin
-    function normalizeAnswer(str) {
-      // Tout en minuscules
-      let ans = str.toLowerCase().trim();
-      // On supprime certains articles (globalement).
-      // On peut en ajouter selon le besoin.
-      // \b = limite de mot (donc "la" etc. si isolé).
-      // 'l' doit être manipulé avec prudence
-      ans = ans.replace(/\bl[’']\b/g, "");     // remplace l' ou l’ seul
-      ans = ans.replace(/\b(le|la|les|un|une|du|des|de)\b/g, ""); 
-      // On retire les espaces excessifs
-      ans = ans.replace(/\s+/g, " ").trim(); 
-      return ans;
+    // Normalisation des réponses en lettres (sans pronom, sans accents, insensible aux majuscules)
+    function normalizeText(str) {
+      if (!str) return "";
+      return str.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Supprime les accents
+                .replace(/\b(le|la|les|un|une|du|des|de|l')\b/g, "") // Supprime les articles
+                .trim();
     }
 
-    window.onload = function() {
-      timerInterval = setInterval(() => {
-        elapsedSeconds++;
-        document.getElementById("timer").textContent = `Temps : ${elapsedSeconds}s`;
-      }, 1000);
-    };
-
+    // Vérification des réponses
     document.getElementById("submit-btn").addEventListener("click", async () => {
-      // Arrête le chrono
       clearInterval(timerInterval);
-
       let totalScore = 0;
 
-      // Parcours des 11 questions
       for (let i = 1; i <= 11; i++) {
-        const userRaw = document.getElementById(`q${i}`).value;
-        const userAnswer = normalizeAnswer(userRaw);
+        const userAnswer = document.getElementById(`q${i}`).value.trim();
+
         if (!userAnswer) {
-          // Si pas de réponse => -1 point
-          totalScore -= 1;
+          totalScore -= 1; // Pas de réponse : -1 point
+        } else if (!isNaN(userAnswer)) {
+          // Réponse numérique (comparaison stricte)
+          if (userAnswer === correctAnswers[`q${i}`]) totalScore += 1;
         } else {
-          // Normalise la bonne réponse également
-          const correct = normalizeAnswer(correctAnswers[`q${i}`] || "");
-          // Compare
-          if (userAnswer === correct) {
-            totalScore += 1;
-          }
-          // sinon => 0
+          // Réponse textuelle (normalisée)
+          const normalizedUser = normalizeText(userAnswer);
+          const normalizedCorrect = normalizeText(correctAnswers[`q${i}`]);
+          if (normalizedUser === normalizedCorrect) totalScore += 1;
         }
       }
 
@@ -211,13 +159,13 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ team_id: teamId })
         });
+
+        window.location.href = "spectator.html"; // Redirection vers le classement
       } catch (error) {
         console.error("Erreur lors de la mise à jour du score ou de la validation :", error);
       }
 
-      // Affiche le résultat + temps écoulé
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = `
+      document.getElementById("result").innerHTML = `
         <p>Vous avez terminé avec un score de ${totalScore} points.</p>
         <p>Temps total : ${elapsedSeconds} secondes.</p>
       `;
